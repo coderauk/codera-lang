@@ -1,11 +1,9 @@
-package uk.co.bssd.hank.datetime;
+package uk.co.codera.lang.datetime;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a measure of time, i.e. a quantity and a unit, e.g. 10 seconds.
- * 
- * @author andystewart
  */
 public final class TimeMeasure {
 

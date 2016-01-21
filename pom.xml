@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>codera-lang</artifactId>
+	<packaging>jar</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<parent>
+		<groupId>uk.co.codera</groupId>
+		<artifactId>codera-parent</artifactId>
+		<version>0.0.3</version>
+	</parent>
+
+	<name>${project.groupId}:${project.artifactId}</name>
+	<description>Codera Lang Project</description>
+	<url>https://github.com/coderauk/codera-lang</url>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://github.com/coderauk/codera-lang/blob/master/LICENSE</url>
+		</license>
+	</licenses>
+
+	<developers>
+	    <developer>
+			<name>Andy Stewart</name>
+			<email>andy.stewart@codera.co.uk</email>
+			<organization>Codera</organization>
+			<organizationUrl>http://www.codera.co.uk</organizationUrl>
+	    </developer>
+  	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:coderauk/codera-lang.git</connection>
+		<developerConnection>scm:git:git@github.com:coderauk/codera-lang.git</developerConnection>
+		<url>git@github.com:coderauk/codera-lang.git</url>
+	  <tag>HEAD</tag>
+  </scm>
+
+</project>

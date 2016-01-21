@@ -1,14 +1,14 @@
-package uk.co.bssd.hank.test.datetime;
+package uk.co.codera.lang.test.datetime;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static uk.co.bssd.hank.datetime.TimeMeasure.seconds;
+import static uk.co.codera.lang.datetime.TimeMeasure.seconds;
 
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
-import uk.co.bssd.hank.datetime.TimeMeasure;
+import uk.co.codera.lang.datetime.TimeMeasure;
 
 public class TimeMeasureTest {
 

@@ -1,4 +1,4 @@
-package uk.co.bssd.hank.test;
+package uk.co.codera.lang.test;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
@@ -15,8 +15,8 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import uk.co.bssd.hank.Announcer;
-import uk.co.bssd.hank.Announcer.ExceptionHandler;
+import uk.co.codera.lang.Announcer;
+import uk.co.codera.lang.Announcer.ExceptionHandler;
 
 @RunWith(value = MockitoJUnitRunner.class)
 public class AnnouncerTest {

@@ -1,4 +1,4 @@
-package uk.co.bssd.hank;
+package uk.co.codera.lang;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -91,11 +91,11 @@ public class Announcer<T> {
 		}
 	}
 
-	public static <T> Announcer<T> to(Class<? extends T> listenerType) {
+	public static <T> Announcer<T> to(Class<T> listenerType) {
 		return new Announcer<T>(listenerType);
 	}
 	
-	public static <T> Announcer<T> to(Class<? extends T> listenerType, Iterable<T> listeners) {
+	public static <T> Announcer<T> to(Class<T> listenerType, Iterable<T> listeners) {
 		return to(listenerType).addListeners(listeners);
 	}
 }

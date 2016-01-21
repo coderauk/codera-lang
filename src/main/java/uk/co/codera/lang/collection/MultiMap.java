@@ -1,4 +1,4 @@
-package uk.co.bssd.hank.collection;
+package uk.co.codera.lang.collection;
 
 import java.util.ArrayList;
 import java.util.Collection;

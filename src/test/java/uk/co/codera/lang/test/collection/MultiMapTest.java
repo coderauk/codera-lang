@@ -1,4 +1,4 @@
-package uk.co.bssd.hank.test.collection;
+package uk.co.codera.lang.test.collection;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import uk.co.bssd.hank.collection.MultiMap;
+import uk.co.codera.lang.collection.MultiMap;
 
 public class MultiMapTest {
 
