@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>uk.co.codera</groupId>
 		<artifactId>codera-parent</artifactId>
-		<version>0.0.3</version>
+		<version>0.0.8</version>
 	</parent>
 
 	<name>${project.groupId}:${project.artifactId}</name>
@@ -38,5 +38,12 @@
 		<url>git@github.com:coderauk/codera-lang.git</url>
 	  <tag>HEAD</tag>
   </scm>
+  
+ 	<dependencies>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		</dependency>
+ 	</dependencies>
 
 </project>
