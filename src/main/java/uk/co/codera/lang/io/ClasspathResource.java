@@ -7,21 +7,21 @@ import org.apache.commons.io.IOUtils;
 
 public class ClasspathResource {
 
-	private final String path;
-	
-	public ClasspathResource(String path) {
-		this.path = path;
-	}
-	
-	public String getAsString() {
-		try {
-			return IOUtils.toString(getAsStream());
-		} catch (IOException e) {
-			throw new IllegalStateException(e);
-		}
-	}
+    private final String path;
 
-	private InputStream getAsStream() {
-		return ClasspathResource.class.getResourceAsStream(this.path);
-	}
+    public ClasspathResource(String path) {
+        this.path = path;
+    }
+
+    public String getAsString() {
+        try {
+            return IOUtils.toString(getAsStream());
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private InputStream getAsStream() {
+        return ClasspathResource.class.getResourceAsStream(this.path);
+    }
 }

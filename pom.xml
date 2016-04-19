@@ -9,10 +9,9 @@
 	<parent>
 		<groupId>uk.co.codera</groupId>
 		<artifactId>codera-parent</artifactId>
-		<version>0.0.8</version>
+		<version>0.0.10</version>
 	</parent>
 
-	<name>${project.groupId}:${project.artifactId}</name>
 	<description>Codera Lang Project</description>
 	<url>https://github.com/coderauk/codera-lang</url>
 
