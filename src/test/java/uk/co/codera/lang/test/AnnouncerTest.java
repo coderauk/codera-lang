@@ -1,5 +1,7 @@
 package uk.co.codera.lang.test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -51,6 +53,11 @@ public class AnnouncerTest {
         this.announcer = Announcer.to(Listener.class).useExceptionHandler(this.exceptionHandler);
         this.announcer.addListener(listener1);
         this.announcer.addListener(listener2);
+    }
+
+    @Test
+    public void shouldReportNumberOfListeners() {
+        assertThat(this.announcer.numberListeners(), is(2));
     }
 
     @Test
