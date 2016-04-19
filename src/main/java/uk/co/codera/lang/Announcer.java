@@ -9,11 +9,13 @@ import java.util.List;
 
 public class Announcer<T> {
 
+    @FunctionalInterface
     public static interface ExceptionHandler {
         void onException(Throwable e);
     }
 
     private static final class DoNothingExceptionHandler implements ExceptionHandler {
+        @Override
         public void onException(Throwable e) {
             // do nothing
         }
@@ -22,13 +24,14 @@ public class Announcer<T> {
     public static final ExceptionHandler EXCEPTION_HANDLER_DO_NOTHING = new DoNothingExceptionHandler();
 
     private final T proxy;
-    private final List<T> listeners = new ArrayList<T>();
+    private final List<T> listeners = new ArrayList<>();
 
     private ExceptionHandler exceptionHandler = EXCEPTION_HANDLER_DO_NOTHING;
 
     private Announcer(Class<? extends T> listenerType) {
         this.proxy = listenerType.cast(Proxy.newProxyInstance(listenerType.getClassLoader(),
                 new Class<?>[] { listenerType }, new InvocationHandler() {
+                    @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         announce(method, args);
                         return null;
@@ -72,6 +75,7 @@ public class Announcer<T> {
         }
     }
 
+    @SuppressWarnings("squid:S1166")
     private void invokeListener(T listener, Method method, Object[] args) throws IllegalAccessException {
         try {
             method.invoke(listener, args);
@@ -86,7 +90,7 @@ public class Announcer<T> {
     }
 
     public static <T> Announcer<T> to(Class<T> listenerType) {
-        return new Announcer<T>(listenerType);
+        return new Announcer<>(listenerType);
     }
 
     public static <T> Announcer<T> to(Class<T> listenerType, Iterable<T> listeners) {
