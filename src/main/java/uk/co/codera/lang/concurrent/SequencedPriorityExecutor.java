@@ -51,7 +51,7 @@ public class SequencedPriorityExecutor implements Executor {
     }
 
     private PriorityBlockingQueue<Runnable> blockingQueue(Comparator<Runnable> comparator) {
-        return new PriorityBlockingQueue<Runnable>(INITIAL_QUEUE_CAPACITY, new SequencedPriorityComparator(comparator));
+        return new PriorityBlockingQueue<>(INITIAL_QUEUE_CAPACITY, new SequencedPriorityComparator(comparator));
     }
 
     private static class SequencedRunnable implements Runnable {
@@ -63,6 +63,7 @@ public class SequencedPriorityExecutor implements Executor {
             this.sequenceNumber = Long.valueOf(sequenceNumber);
         }
 
+        @SuppressWarnings("squid:S1217")
         @Override
         public void run() {
             this.underlyingRunnable.run();

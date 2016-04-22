@@ -24,7 +24,7 @@ public class ClassPriorityComparator<T> implements Comparator<T> {
         }
 
         public ClassPriorityComparator<T> build() {
-            return new ClassPriorityComparator<T>(this);
+            return new ClassPriorityComparator<>(this);
         }
     }
 }
