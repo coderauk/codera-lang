@@ -25,7 +25,6 @@ public class SequencedPriorityExecutorTest {
     @Before
     public void before() {
         Comparator<Runnable> comparator = new Comparator<Runnable>() {
-
             @Override
             public int compare(Runnable o1, Runnable o2) {
                 return priority(o2).compareTo(priority(o1));
