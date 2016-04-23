@@ -13,6 +13,7 @@ package uk.co.codera.lang.concurrent;
  * @author andystewart
  *
  */
+@FunctionalInterface
 public interface Task {
 
     void execute();

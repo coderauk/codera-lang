@@ -96,7 +96,7 @@ public class Announcer<T> {
     }
 
     private InvocationHandler invocationHandler() {
-        return (proxy, method, args) -> {
+        return (proxiedObject, method, args) -> {
             announce(method, args);
             return null;
         };

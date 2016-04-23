@@ -17,6 +17,7 @@ package uk.co.codera.lang.concurrent;
  * 
  * @author andystewart
  */
+@FunctionalInterface
 public interface Command {
 
     void execute();

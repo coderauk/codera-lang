@@ -2,6 +2,10 @@ package uk.co.codera.lang.concurrent;
 
 public class Tasks {
 
+	private Tasks() {
+		super();
+	}
+	
     public static SimpleTask.Builder aTask() {
         return SimpleTask.aTask();
     }
