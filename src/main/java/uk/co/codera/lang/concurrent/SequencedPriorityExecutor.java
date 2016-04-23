@@ -72,9 +72,9 @@ public class SequencedPriorityExecutor implements Executor {
         public Long getSequenceNumber() {
             return sequenceNumber;
         }
-        
+
         public Runnable getUnderlyingRunnable() {
-        	return this.underlyingRunnable;
+            return this.underlyingRunnable;
         }
     }
 
@@ -88,8 +88,8 @@ public class SequencedPriorityExecutor implements Executor {
 
         @Override
         public int compare(Runnable o1, Runnable o2) {
-        	SequencedRunnable s1 = (SequencedRunnable)o1;
-        	SequencedRunnable s2 = (SequencedRunnable)o2;
+            SequencedRunnable s1 = (SequencedRunnable) o1;
+            SequencedRunnable s2 = (SequencedRunnable) o2;
             int priority = this.priorityComparator.compare(s1.getUnderlyingRunnable(), s2.getUnderlyingRunnable());
             if (priority == 0) {
                 return s1.getSequenceNumber().compareTo(s2.getSequenceNumber());

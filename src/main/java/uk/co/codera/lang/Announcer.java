@@ -30,13 +30,15 @@ public class Announcer<T> {
 
     private Announcer(Class<? extends T> listenerType) {
         this.proxy = listenerType.cast(Proxy.newProxyInstance(listenerType.getClassLoader(),
-                new Class<?>[] { listenerType }, new InvocationHandler() {
-                    @Override
-                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                        announce(method, args);
-                        return null;
-                    }
-                }));
+                new Class<?>[] { listenerType }, invocationHandler()));
+    }
+
+    public static <T> Announcer<T> to(Class<T> listenerType) {
+        return new Announcer<>(listenerType);
+    }
+
+    public static <T> Announcer<T> to(Class<T> listenerType, Iterable<T> listeners) {
+        return to(listenerType).addListeners(listeners);
     }
 
     public Announcer<T> addListener(T listener) {
@@ -93,11 +95,10 @@ public class Announcer<T> {
         }
     }
 
-    public static <T> Announcer<T> to(Class<T> listenerType) {
-        return new Announcer<>(listenerType);
-    }
-
-    public static <T> Announcer<T> to(Class<T> listenerType, Iterable<T> listeners) {
-        return to(listenerType).addListeners(listeners);
+    private InvocationHandler invocationHandler() {
+        return (proxy, method, args) -> {
+            announce(method, args);
+            return null;
+        };
     }
 }
