@@ -18,7 +18,7 @@ public class Tasks {
     	return CancellingTask.aTask();
     }
 
-    public static abstract class AbstractTask implements Task {
+    public abstract static class AbstractTask implements Task {
     	
     	private final Command command;
     	
@@ -31,7 +31,7 @@ public class Tasks {
     		this.command.execute();
     	}
     	
-    	public static abstract class Builder<T> {
+    	public abstract static class Builder<T> {
     		
     		private Command command;
     		
@@ -45,7 +45,7 @@ public class Tasks {
     	}
     }
     
-    public static abstract class AbstractCorrelatedTask extends AbstractTask {
+    public abstract static class AbstractCorrelatedTask extends AbstractTask {
     	
     	private final Object correlationId;
     	private final Comparable<?> sequence;
@@ -64,7 +64,7 @@ public class Tasks {
 			return this.sequence;
 		}
     	
-    	public static abstract class Builder<T> extends AbstractTask.Builder<T> {
+    	public abstract static class Builder<T> extends AbstractTask.Builder<T> {
     		
     		private Object correlationId;
     		private Comparable<?> sequence;
