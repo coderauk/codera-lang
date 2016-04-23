@@ -18,149 +18,149 @@ import uk.co.codera.lang.concurrent.Tasks.AbstractTask;
 
 public class TaskExecutorTest {
 
-	private static final long DEFAULT_TIMEOUT = 1000;
-	
-	private TaskExecutor taskExecutor;
+    private static final long DEFAULT_TIMEOUT = 1000;
 
-	@Before
-	public void before() {
-		Comparator<Runnable> comparator = new Comparator<Runnable>() {
-			@Override
-			public int compare(Runnable o1, Runnable o2) {
-				return priority(o2).compareTo(priority(o1));
-			}
+    private TaskExecutor taskExecutor;
 
-			private Integer priority(Runnable o) {
-				return 0;
-			}
-		};
-		this.taskExecutor = new TaskExecutor(SequencedPriorityExecutor.singleThreadedExecutor(comparator));
-	}
+    @Before
+    public void before() {
+        Comparator<Runnable> comparator = new Comparator<Runnable>() {
+            @Override
+            public int compare(Runnable o1, Runnable o2) {
+                return priority(o2).compareTo(priority(o1));
+            }
 
-	@Test
-	public void shouldExecuteSubmittedTask() {
-		Command command = mock(Command.class);
-		submit(Tasks.aTask().with(command));
-		verify(command, timeout(1000)).execute();
-	}
+            private Integer priority(Runnable o) {
+                return 0;
+            }
+        };
+        this.taskExecutor = new TaskExecutor(SequencedPriorityExecutor.singleThreadedExecutor(comparator));
+    }
 
-	@Test
-	public void shouldShouldCancelTaskItOverakesWithSameCorrelationId() {
-		Command cancellableCommand = mock(Command.class);
-		Command cancellingCommand = mock(Command.class);
+    @Test
+    public void shouldExecuteSubmittedTask() {
+        Command command = mock(Command.class);
+        submit(Tasks.aTask().with(command));
+        verify(command, timeout(1000)).execute();
+    }
 
-		BlockingCommand blockingCommand = submitBlockingCommand();
-		
-		submit(Tasks.aCancellableTask().with(cancellableCommand).correlationId("jeff").sequence(Long.valueOf(1)));
-		submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(2)));
+    @Test
+    public void shouldShouldCancelTaskItOverakesWithSameCorrelationId() {
+        Command cancellableCommand = mock(Command.class);
+        Command cancellingCommand = mock(Command.class);
 
-		blockingCommand.release();
+        BlockingCommand blockingCommand = submitBlockingCommand();
 
-		waitForAllTasksToExecuteWithinDefaultTimeout();
+        submit(Tasks.aCancellableTask().with(cancellableCommand).correlationId("jeff").sequence(Long.valueOf(1)));
+        submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(2)));
 
-		verify(cancellingCommand).execute();
-		verify(cancellableCommand, never()).execute();
-	}
-	
-	@Test
-	public void shouldNotShouldCancelTaskItHasNotOverakenWithSameCorrelationId() {
-		Command cancellableCommand = mock(Command.class);
-		Command cancellingCommand = mock(Command.class);
-		
-		submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(1)));
-		submit(Tasks.aCancellableTask().with(cancellableCommand).correlationId("jeff").sequence(Long.valueOf(2)));
-		
-		waitForAllTasksToExecuteWithinDefaultTimeout();
-		
-		verify(cancellingCommand).execute();
-		verify(cancellableCommand).execute();
-	}
-	
-	@Test
-	public void shouldShouldCancelTaskItOverakesAndProcessSubsequentTaskWithSameCorrelationId() {
-		Command cancellableCommand1 = mock(Command.class);
-		Command cancellingCommand = mock(Command.class);
-		Command cancellableCommand2 = mock(Command.class);
-		
-		BlockingCommand blockingCommand = submitBlockingCommand();
-		
-		submit(Tasks.aCancellableTask().with(cancellableCommand1).correlationId("jeff").sequence(Long.valueOf(1)));
-		submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(2)));
-		submit(Tasks.aCancellableTask().with(cancellableCommand2).correlationId("jeff").sequence(Long.valueOf(3)));
-		
-		blockingCommand.release();
-		
-		waitForAllTasksToExecuteWithinDefaultTimeout();
-		
-		verify(cancellingCommand).execute();
-		verify(cancellableCommand1, never()).execute();
-		verify(cancellableCommand2).execute();
-	}
+        blockingCommand.release();
 
-	private void waitForAllTasksToExecuteWithinDefaultTimeout() {
-		waitForAllTasksToExecuteWithinTimeout(DEFAULT_TIMEOUT);
-	}
-	
-	private void waitForAllTasksToExecuteWithinTimeout(long timeout) {
-		AwaitableCommand awaitableCommand = submitAwaitableCommand();
-		assertThat(awaitableCommand.waitForCommandToCompleteWithinTimeout(timeout), is(true));
-	}
-	
-	private AwaitableCommand submitAwaitableCommand() {
-		AwaitableCommand awaitableCommand = new AwaitableCommand();
-		submit(Tasks.aTask().with(awaitableCommand));
-		return awaitableCommand;
-	}
+        waitForAllTasksToExecuteWithinDefaultTimeout();
 
-	private BlockingCommand submitBlockingCommand() {
-		BlockingCommand blockingCommand = new BlockingCommand();
-		submit(Tasks.aTask().with(blockingCommand));
-		return blockingCommand;
-	}
+        verify(cancellingCommand).execute();
+        verify(cancellableCommand, never()).execute();
+    }
 
-	private void submit(AbstractTask.Builder<?> task) {
-		this.taskExecutor.submit(task.build());
-	}
+    @Test
+    public void shouldNotShouldCancelTaskItHasNotOverakenWithSameCorrelationId() {
+        Command cancellableCommand = mock(Command.class);
+        Command cancellingCommand = mock(Command.class);
 
-	private static class AwaitableCommand implements Command {
-		private final CountDownLatch latch;
+        submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(1)));
+        submit(Tasks.aCancellableTask().with(cancellableCommand).correlationId("jeff").sequence(Long.valueOf(2)));
 
-		private AwaitableCommand() {
-			this.latch = new CountDownLatch(1);
-		}
+        waitForAllTasksToExecuteWithinDefaultTimeout();
 
-		@Override
-		public void execute() {
-			this.latch.countDown();
-		}
+        verify(cancellingCommand).execute();
+        verify(cancellableCommand).execute();
+    }
 
-		public boolean waitForCommandToCompleteWithinTimeout(long timeout) {
-			try {
-				return this.latch.await(timeout, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
-				return false;
-			}
-		}
-	}
+    @Test
+    public void shouldShouldCancelTaskItOverakesAndProcessSubsequentTaskWithSameCorrelationId() {
+        Command cancellableCommand1 = mock(Command.class);
+        Command cancellingCommand = mock(Command.class);
+        Command cancellableCommand2 = mock(Command.class);
 
-	private class BlockingCommand implements Command {
+        BlockingCommand blockingCommand = submitBlockingCommand();
 
-		private final CountDownLatch latch;
+        submit(Tasks.aCancellableTask().with(cancellableCommand1).correlationId("jeff").sequence(Long.valueOf(1)));
+        submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(2)));
+        submit(Tasks.aCancellableTask().with(cancellableCommand2).correlationId("jeff").sequence(Long.valueOf(3)));
 
-		public BlockingCommand() {
-			this.latch = new CountDownLatch(1);
-		}
+        blockingCommand.release();
 
-		@Override
-		public void execute() {
-			try {
-				this.latch.await();
-			} catch (InterruptedException e) {
-			}
-		}
+        waitForAllTasksToExecuteWithinDefaultTimeout();
 
-		public void release() {
-			this.latch.countDown();
-		}
-	}
+        verify(cancellingCommand).execute();
+        verify(cancellableCommand1, never()).execute();
+        verify(cancellableCommand2).execute();
+    }
+
+    private void waitForAllTasksToExecuteWithinDefaultTimeout() {
+        waitForAllTasksToExecuteWithinTimeout(DEFAULT_TIMEOUT);
+    }
+
+    private void waitForAllTasksToExecuteWithinTimeout(long timeout) {
+        AwaitableCommand awaitableCommand = submitAwaitableCommand();
+        assertThat(awaitableCommand.waitForCommandToCompleteWithinTimeout(timeout), is(true));
+    }
+
+    private AwaitableCommand submitAwaitableCommand() {
+        AwaitableCommand awaitableCommand = new AwaitableCommand();
+        submit(Tasks.aTask().with(awaitableCommand));
+        return awaitableCommand;
+    }
+
+    private BlockingCommand submitBlockingCommand() {
+        BlockingCommand blockingCommand = new BlockingCommand();
+        submit(Tasks.aTask().with(blockingCommand));
+        return blockingCommand;
+    }
+
+    private void submit(AbstractTask.Builder<?> task) {
+        this.taskExecutor.submit(task.build());
+    }
+
+    private static class AwaitableCommand implements Command {
+        private final CountDownLatch latch;
+
+        private AwaitableCommand() {
+            this.latch = new CountDownLatch(1);
+        }
+
+        @Override
+        public void execute() {
+            this.latch.countDown();
+        }
+
+        public boolean waitForCommandToCompleteWithinTimeout(long timeout) {
+            try {
+                return this.latch.await(timeout, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                return false;
+            }
+        }
+    }
+
+    private class BlockingCommand implements Command {
+
+        private final CountDownLatch latch;
+
+        public BlockingCommand() {
+            this.latch = new CountDownLatch(1);
+        }
+
+        @Override
+        public void execute() {
+            try {
+                this.latch.await();
+            } catch (InterruptedException e) {
+            }
+        }
+
+        public void release() {
+            this.latch.countDown();
+        }
+    }
 }
