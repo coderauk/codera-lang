@@ -3,7 +3,7 @@ package uk.co.codera.lang.concurrent;
 /**
  * <p>
  * Tasks are the mechanism used to execute commands {@link Command} using the
- * {@link TaskExecutor}.
+ * {@link PriorityTaskExecutor}.
  * </p>
  * <p>
  * The TaskExecturo is responsible for determining if the task should be run

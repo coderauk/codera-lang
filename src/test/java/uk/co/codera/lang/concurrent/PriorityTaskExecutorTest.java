@@ -7,7 +7,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-import java.util.Comparator;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -16,25 +15,15 @@ import org.junit.Test;
 
 import uk.co.codera.lang.concurrent.Tasks.AbstractTask;
 
-public class TaskExecutorTest {
+public class PriorityTaskExecutorTest {
 
     private static final long DEFAULT_TIMEOUT = 1000;
 
-    private TaskExecutor taskExecutor;
+    private PriorityTaskExecutor taskExecutor;
 
     @Before
     public void before() {
-        Comparator<Runnable> comparator = new Comparator<Runnable>() {
-            @Override
-            public int compare(Runnable o1, Runnable o2) {
-                return priority(o2).compareTo(priority(o1));
-            }
-
-            private Integer priority(Runnable o) {
-                return 0;
-            }
-        };
-        this.taskExecutor = new TaskExecutor(SequencedPriorityExecutor.singleThreadedExecutor(comparator));
+        this.taskExecutor = new PriorityTaskExecutor();
     }
 
     @Test

@@ -1,5 +1,6 @@
 package uk.co.codera.lang.concurrent;
 
+import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
@@ -7,14 +8,29 @@ import java.util.concurrent.Executor;
 import uk.co.codera.lang.concurrent.Tasks.CancellableTask;
 import uk.co.codera.lang.concurrent.Tasks.CancellingTask;
 
-public class TaskExecutor {
+/**
+ * <p>
+ * A task executor that will process tasks in priority order. It allows tasks
+ * that overtake to cancel other tasks in the queue.
+ * </p>
+ * <p>
+ * Currently the implementation only allows for serial execution of tasks, i.e.
+ * it is single threaded. This is to prevent tasks with the same correlation id
+ * being processed concurrently. In future an executor that allows multiple
+ * threads whilst keeping tasks with the same correlation id in order may be
+ * provided.
+ * </p>
+ * 
+ * @author andystewart
+ */
+public class PriorityTaskExecutor {
 
     private final Executor executor;
     private final ConcurrentMap<Object, Comparable<?>> cancelledTasks;
     private final RunPolicyFactory runPolicies;
 
-    public TaskExecutor(Executor executor) {
-        this.executor = executor;
+    public PriorityTaskExecutor() {
+        this.executor = SequencedPriorityExecutor.singleThreadedExecutor(new PriorityTaskComparator());
         this.cancelledTasks = new ConcurrentHashMap<>();
         this.runPolicies = new RunPolicyFactory(this.cancelledTasks);
     }
@@ -27,6 +43,17 @@ public class TaskExecutor {
     private RunPolicy<Task> runPolicyFor(Task task) {
         return (RunPolicy<Task>) this.runPolicies.policyFor(task);
     }
+
+    private static class PriorityTaskComparator implements Comparator<Runnable> {
+        @Override
+        public int compare(Runnable o1, Runnable o2) {
+            return priority(o2).compareTo(priority(o1));
+        }
+
+        private Integer priority(Runnable o) {
+            return 0;
+        }
+    };
 
     private static class TaskRunner implements Runnable {
 
