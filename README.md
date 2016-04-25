@@ -10,7 +10,7 @@ Helper classes and utilities around core Java concepts such as io, collections, 
 
 ### Announcer
 
-The Announcer is pretty much a direct copy of the class written by Nat Pryce (http://natpryce.com/articles/000710.html) with a few additions such as the ability to specify an ErrorHandler.
+The Announcer is pretty much a direct copy of the class written by Nat Pryce (http://natpryce.com/articles/000710.html) with a few additions such as the ability to specify an ExceptionHandler.
 
 #### Usage
 
