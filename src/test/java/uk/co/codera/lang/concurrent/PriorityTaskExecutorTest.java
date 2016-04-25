@@ -138,7 +138,7 @@ public class PriorityTaskExecutorTest {
         Command cancellableCommand = mock(Command.class);
         Command normalCommand = mock(Command.class);
 
-        InOrder inOrder = inOrder(cancellableCommand, normalCommand);
+        InOrder inOrder = inOrder(normalCommand, cancellableCommand);
 
         BlockingCommand blockingCommand = submitBlockingCommand();
 
@@ -182,7 +182,7 @@ public class PriorityTaskExecutorTest {
         Command cancellingCommand = mock(Command.class);
         Command normalCommand = mock(Command.class);
 
-        InOrder inOrder = inOrder(cancellingCommand, normalCommand);
+        InOrder inOrder = inOrder(normalCommand, cancellingCommand);
 
         BlockingCommand blockingCommand = submitBlockingCommand();
 
