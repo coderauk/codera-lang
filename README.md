@@ -42,7 +42,7 @@ Constructing a task executor where normal tasks can overtake both cancellable an
 PriorityTaskExecutor.aTaskExecutor().allowNormalTasksToOvertakeAllTasks().build();
 ```
 
-#### Constructing a Task
+#### Executing a Task
 
 The `Tasks` class is reponsible for constructing a Task of the correct type. Each type of task must at a mininum have the `Command` it is to execute. This is a simple functional interface that has an `execute()` method on it.
 
@@ -56,6 +56,20 @@ public void onMessage(PlaceOrderRequest request) {
 }
 ```
 
+Cancellable and cancelling tasks must also supply the correlationId and sequence for the task. 
+
+The construction is almost identical:
+
+```java
+Tasks.aCancellableTask().with(placeOrderCommand).correlationId(placeOrderRequest.getOrderId()).sequence(placeOrderRequest.getTimestamp());
+Tasks.aCancellingTask().with(cancelOrderRequest).correlationId(cancelOrderRequest.getTimestamp()).sequence(cancelOrderRequest.getTimestamp());
+```
+
+The correlationId identifies those tasks that should be cancelled when tasks overtake. 
+
+The sequence can be any object that is comparable, for instance a ```Long``` or a ```DateTime```.
+
+When  
 
 ## Misc
 
