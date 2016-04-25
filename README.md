@@ -157,5 +157,6 @@ public class LoggingExceptionHandler implements ExceptionHandler {
 It is then registered when building the `Announcer`:
 
 ```java
-Announcer<Listener> announcer = Announcer.to(Listener.class).useExceptionHandler(new LoggingExceptionHandler());
+Announcer<Listener> announcer = 
+	Announcer.to(Listener.class).useExceptionHandler(new LoggingExceptionHandler());
 ```
