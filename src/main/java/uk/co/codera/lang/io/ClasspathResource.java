@@ -16,7 +16,7 @@ public class ClasspathResource {
     public String getAsString() {
         try {
             return IOUtils.toString(getAsStream());
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             throw new IllegalStateException(e);
         }
     }
