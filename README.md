@@ -28,6 +28,19 @@ Constructing a PriorityTaskExecutor with the default configuration whereby defau
 PriorityTaskExecutor taskExecutor = PriorityTaskExecutor.aTaskExecutor().build();
 ```
 
+Constructing a task executor where normal tasks can overtake cancellable tasks:
+
+```
+PriorityTaskExecutor.aTaskExecutor().allowNormalTasksToOvertakeCancellableTasks().build();
+```
+
+Constructing a task executor where normal tasks can overtake both cancellable and cancelling tasks:
+
+```
+PriorityTaskExecutor.aTaskExecutor().allowNormalTasksToOvertakeAllTasks().build();
+```
+
+
 ## Misc
 
 ### Announcer
