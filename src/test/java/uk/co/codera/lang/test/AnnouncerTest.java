@@ -2,6 +2,7 @@ package uk.co.codera.lang.test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -10,6 +11,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -136,6 +138,19 @@ public class AnnouncerTest {
         announcerWithDefaultExceptionPolicyAndListenersRegistered().announce().eventA();
 
         verify(this.listener2).eventA();
+    }
+
+    @Test
+    public void testErrorIsThrownAndStopsOtherListenersBeingInvoked() {
+        doThrow(new Error()).when(this.listener1).eventA();
+
+        try {
+            announcerWithDefaultExceptionPolicyAndListenersRegistered().announce().eventA();
+            fail("expected error to be thrown");
+        } catch (Error e) {
+        }
+
+        verify(this.listener2, never()).eventA();
     }
 
     private Announcer<Listener> announcerWithDefaultExceptionPolicyAndListenersRegistered() {
