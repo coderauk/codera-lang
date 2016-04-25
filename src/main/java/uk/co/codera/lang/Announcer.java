@@ -72,20 +72,16 @@ public class Announcer<T> {
     }
 
     private void announce(Method m, Object[] args) {
-        try {
-            for (T listener : this.listeners) {
-                invokeListener(listener, m, args);
-            }
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("could not invoke listener", e);
+        for (T listener : this.listeners) {
+            invokeListener(listener, m, args);
         }
     }
 
     @SuppressWarnings("squid:S1166")
-    private void invokeListener(T listener, Method method, Object[] args) throws IllegalAccessException {
+    private void invokeListener(T listener, Method method, Object[] args) {
         try {
             method.invoke(listener, args);
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             Throwable cause = e.getCause();
 
             if (cause instanceof Error) {
