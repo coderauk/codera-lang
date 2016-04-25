@@ -63,3 +63,23 @@ By default the announcer is created with a do nothing error handling policy. Thi
 By do nothing we also mean do absolutely nothing, not even log. This is because we consider it bad form to force a particular logging framework onto users of this library. 
 
 Therefore if you wish to log or notify when listeners fail then you should implement your own error handler and register it when building the announcer. 
+
+A simple implementation of an ExceptionHandler might look like:
+
+```
+public class LoggingExceptionHandler implements ExceptionHandler {
+
+	private static final Logger logger = LoggerFactory.getLogger(LoggingExceptionHandler.class);
+		
+	@Override
+	public void onException(Throwable e) {
+		logger.error("Exception caught whilst invoking listener", e);
+	}
+}
+```
+
+It is then registered when building the `Announcer`:
+
+```
+Announcer<Listener> announcer = Announcer.to(Listener.class).useExceptionHandler(new LoggingExceptionHandler());
+```
