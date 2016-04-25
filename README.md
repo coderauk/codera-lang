@@ -26,19 +26,19 @@ Allowing default tasks to overtake is useful when they are required to report th
 
 Constructing a PriorityTaskExecutor with the default configuration whereby default and cancellable tasks have the same priority:
 
-```
+```java
 PriorityTaskExecutor taskExecutor = PriorityTaskExecutor.aTaskExecutor().build();
 ```
 
 Constructing a task executor where normal tasks can overtake cancellable tasks:
 
-```
+```java
 PriorityTaskExecutor.aTaskExecutor().allowNormalTasksToOvertakeCancellableTasks().build();
 ```
 
 Constructing a task executor where normal tasks can overtake both cancellable and cancelling tasks:
 
-```
+```java
 PriorityTaskExecutor.aTaskExecutor().allowNormalTasksToOvertakeAllTasks().build();
 ```
 
@@ -61,8 +61,16 @@ Cancellable and cancelling tasks must also supply the correlationId and sequence
 The construction is almost identical:
 
 ```java
-Tasks.aCancellableTask().with(placeOrderCommand).correlationId(placeOrderRequest.getOrderId()).sequence(placeOrderRequest.getTimestamp());
-Tasks.aCancellingTask().with(cancelOrderRequest).correlationId(cancelOrderRequest.getTimestamp()).sequence(cancelOrderRequest.getTimestamp());
+Task placeOrderTask = Tasks.aCancellableTask()
+  .with(placeOrderCommand)
+  .correlationId(placeOrderRequest.getOrderId())
+  .sequence(placeOrderRequest.getTimestamp())
+  .build();
+Task cancelOrderTask = Tasks.aCancellingTask()
+  .with(cancelOrderCommand)
+  .correlationId(cancelOrderRequest.getTimestamp())
+  .sequence(cancelOrderRequest.getTimestamp())
+  .build();
 ```
 
 The correlationId identifies those tasks that should be cancelled when tasks overtake. 
@@ -79,7 +87,7 @@ The Announcer is pretty much a direct copy of the class written by Nat Pryce (ht
 
 #### Usage
 
-```
+```java
 public class GitEventBroadcaster implements GitEventListener {
 
     private final Announcer<GitEventListener> announcer;
@@ -107,7 +115,7 @@ The above example shows pretty much all the functionality of the announcer.
 
 The announcer is instantiated using the following syntax:
 
-```
+```java
 this.announcer = Announcer.to(GitEventListener.class);
 ``` 
 
@@ -115,7 +123,7 @@ This creates an `Announcer` of type `GitEventListener`. It is this instance to w
 
 Notifying all the listeners is then as simple as:
 
-```
+```java
 this.announcer.announce().onPush(event);
 ```
 
@@ -131,20 +139,20 @@ Therefore if you wish to log or notify when listeners fail then you should imple
 
 A simple implementation of an ExceptionHandler might look like:
 
-```
+```java
 public class LoggingExceptionHandler implements ExceptionHandler {
 
-	private static final Logger logger = LoggerFactory.getLogger(LoggingExceptionHandler.class);
+  private static final Logger logger = LoggerFactory.getLogger(LoggingExceptionHandler.class);
 		
-	@Override
-	public void onException(Throwable e) {
-		logger.error("Exception caught whilst invoking listener", e);
-	}
+  @Override
+  public void onException(Throwable e) {
+    logger.error("Exception caught whilst invoking listener", e);
+  }
 }
 ```
 
 It is then registered when building the `Announcer`:
 
-```
+```java
 Announcer<Listener> announcer = Announcer.to(Listener.class).useExceptionHandler(new LoggingExceptionHandler());
 ```
