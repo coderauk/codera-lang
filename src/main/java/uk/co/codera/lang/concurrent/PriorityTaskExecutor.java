@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
 
-import uk.co.codera.lang.concurrent.PriorityTaskExecutor.Builder;
 import uk.co.codera.lang.concurrent.Tasks.CancellableTask;
 import uk.co.codera.lang.concurrent.Tasks.CancellingTask;
 
