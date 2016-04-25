@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-codera-lang,uk.co.codera.lang,Announcer,15,124,1,5,4,35,2,15,1,13
-codera-lang,uk.co.codera.lang,Announcer.DoNothingExceptionHandler,1,3,0,0,1,1,1,1,1,1
+codera-lang,uk.co.codera.lang,Announcer,0,131,0,6,0,36,0,17,0,14
+codera-lang,uk.co.codera.lang,Announcer.DoNothingExceptionHandler,0,4,0,0,0,2,0,2,0,2
 codera-lang,uk.co.codera.lang.measure,UnitOfLength,17,29,0,0,2,3,4,2,4,2
 codera-lang,uk.co.codera.lang.measure,UnitOfLength.new UnitOfLength() {...},0,16,0,0,0,3,0,3,0,3
 codera-lang,uk.co.codera.lang.measure,UnitOfLength.new UnitOfLength() {...},0,15,0,0,0,3,0,3,0,3
@@ -27,6 +27,6 @@ codera-lang,uk.co.codera.lang.concurrent,Tasks.AbstractCorrelatedTask,0,19,0,0,0
 codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.PriorityTaskComparator,0,36,0,4,0,10,0,5,0,3
 codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.AlwaysRun,0,8,0,0,0,2,0,2,0,2
 codera-lang,uk.co.codera.lang.concurrent,Tasks.SimpleTask.Builder,0,9,0,0,0,2,0,2,0,2
-codera-lang,uk.co.codera.lang.datetime,TimeMeasure,4,34,0,0,1,9,1,6,1,6
+codera-lang,uk.co.codera.lang.datetime,TimeMeasure,0,38,0,0,0,10,0,7,0,7
 codera-lang,uk.co.codera.lang.collection,MultiMap,0,49,0,4,0,11,0,6,0,4
 codera-lang,uk.co.codera.lang.io,ClasspathResource,6,15,0,0,2,5,0,3,0,3
