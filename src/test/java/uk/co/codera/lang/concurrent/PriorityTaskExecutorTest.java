@@ -6,6 +6,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+import static uk.co.codera.lang.concurrent.Tasks.aCancellableTask;
+import static uk.co.codera.lang.concurrent.Tasks.aCancellingTask;
+import static uk.co.codera.lang.concurrent.Tasks.aTask;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +32,7 @@ public class PriorityTaskExecutorTest {
     @Test
     public void shouldExecuteSubmittedTask() {
         Command command = mock(Command.class);
-        submit(Tasks.aTask().with(command));
+        submit(aTask().with(command));
         verify(command, timeout(1000)).execute();
     }
 
@@ -40,8 +43,8 @@ public class PriorityTaskExecutorTest {
 
         BlockingCommand blockingCommand = submitBlockingCommand();
 
-        submit(Tasks.aCancellableTask().with(cancellableCommand).correlationId("jeff").sequence(Long.valueOf(1)));
-        submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(2)));
+        submit(aCancellableTask().with(cancellableCommand).correlationId("jeff").sequence(Long.valueOf(1)));
+        submit(aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(2)));
 
         blockingCommand.release();
 
@@ -56,8 +59,8 @@ public class PriorityTaskExecutorTest {
         Command cancellableCommand = mock(Command.class);
         Command cancellingCommand = mock(Command.class);
 
-        submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(1)));
-        submit(Tasks.aCancellableTask().with(cancellableCommand).correlationId("jeff").sequence(Long.valueOf(2)));
+        submit(aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(1)));
+        submit(aCancellableTask().with(cancellableCommand).correlationId("jeff").sequence(Long.valueOf(2)));
 
         waitForAllTasksToExecuteWithinDefaultTimeout();
 
@@ -73,9 +76,9 @@ public class PriorityTaskExecutorTest {
 
         BlockingCommand blockingCommand = submitBlockingCommand();
 
-        submit(Tasks.aCancellableTask().with(cancellableCommand1).correlationId("jeff").sequence(Long.valueOf(1)));
-        submit(Tasks.aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(2)));
-        submit(Tasks.aCancellableTask().with(cancellableCommand2).correlationId("jeff").sequence(Long.valueOf(3)));
+        submit(aCancellableTask().with(cancellableCommand1).correlationId("jeff").sequence(Long.valueOf(1)));
+        submit(aCancellingTask().with(cancellingCommand).correlationId("jeff").sequence(Long.valueOf(2)));
+        submit(aCancellableTask().with(cancellableCommand2).correlationId("jeff").sequence(Long.valueOf(3)));
 
         blockingCommand.release();
 

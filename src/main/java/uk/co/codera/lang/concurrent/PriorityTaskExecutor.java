@@ -51,6 +51,13 @@ public class PriorityTaskExecutor {
         }
 
         private Integer priority(Runnable o) {
+            Class<?> clazz = ((TaskRunner) o).task.getClass();
+
+            if (clazz == CancellableTask.class) {
+                return 0;
+            } else if (clazz == CancellingTask.class) {
+                return 1;
+            }
             return 0;
         }
     };
@@ -137,7 +144,7 @@ public class PriorityTaskExecutor {
                 }
                 return reachedCancelledSequence;
             }
-            return false;
+            return true;
         }
 
         @SuppressWarnings("unchecked")
