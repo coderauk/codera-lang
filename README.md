@@ -66,9 +66,10 @@ Task placeOrderTask = Tasks.aCancellableTask()
   .correlationId(placeOrderRequest.getOrderId())
   .sequence(placeOrderRequest.getTimestamp())
   .build();
+
 Task cancelOrderTask = Tasks.aCancellingTask()
   .with(cancelOrderCommand)
-  .correlationId(cancelOrderRequest.getTimestamp())
+  .correlationId(cancelOrderRequest.getOrderId())
   .sequence(cancelOrderRequest.getTimestamp())
   .build();
 ```
@@ -77,7 +78,9 @@ The correlationId identifies those tasks that should be cancelled when tasks ove
 
 The sequence can be any object that is comparable, for instance a ```Long``` or a ```DateTime```.
 
-When  
+When a cancelling task is executed the sequence is recorded against the correlationId. Any subsequent cancellable tasks are executed have their sequence checked. If the sequence is less than that recorded they are not executed. If they are after the cancelling task then the correlationId is cleared and the task executed.
+
+> Note that you should make sure the sequence numbers are allocated correctly to make sure a cancellable task does not clear the status in error and tasks that should have been cancelled get executed by mistak.
 
 ## Misc
 
