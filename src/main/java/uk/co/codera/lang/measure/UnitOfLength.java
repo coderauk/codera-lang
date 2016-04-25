@@ -29,11 +29,7 @@ public enum UnitOfLength {
         }
     };
 
-    public BigDecimal toMetres(BigDecimal length) {
-        throw new AbstractMethodError();
-    }
+    public abstract BigDecimal toMetres(BigDecimal length);
 
-    public BigDecimal toMiles(BigDecimal length) {
-        throw new AbstractMethodError();
-    }
+    public abstract BigDecimal toMiles(BigDecimal length);
 }
