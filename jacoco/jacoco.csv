@@ -1,7 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 codera-lang,uk.co.codera.lang,Announcer,0,131,0,6,0,36,0,17,0,14
 codera-lang,uk.co.codera.lang,Announcer.DoNothingExceptionHandler,0,4,0,0,0,2,0,2,0,2
-codera-lang,uk.co.codera.lang.measure,UnitOfLength,17,29,0,0,2,3,4,2,4,2
+codera-lang,uk.co.codera.lang.measure,UnitOfLength,9,29,0,0,0,3,2,2,2,2
 codera-lang,uk.co.codera.lang.measure,UnitOfLength.new UnitOfLength() {...},0,16,0,0,0,3,0,3,0,3
 codera-lang,uk.co.codera.lang.measure,UnitOfLength.new UnitOfLength() {...},0,15,0,0,0,3,0,3,0,3
 codera-lang,uk.co.codera.lang.concurrent,Tasks.CancellableTask.Builder,0,9,0,0,0,2,0,2,0,2
@@ -29,4 +29,4 @@ codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.AlwaysRun,0,8,0,0,
 codera-lang,uk.co.codera.lang.concurrent,Tasks.SimpleTask.Builder,0,9,0,0,0,2,0,2,0,2
 codera-lang,uk.co.codera.lang.datetime,TimeMeasure,0,38,0,0,0,10,0,7,0,7
 codera-lang,uk.co.codera.lang.collection,MultiMap,0,49,0,4,0,11,0,6,0,4
-codera-lang,uk.co.codera.lang.io,ClasspathResource,6,15,0,0,2,5,0,3,0,3
+codera-lang,uk.co.codera.lang.io,ClasspathResource,0,21,0,0,0,7,0,3,0,3
