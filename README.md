@@ -22,6 +22,8 @@ Allowing default tasks to overtake is useful when they are required to report th
 
 ### Usage
 
+#### Constructing a PriorityTaskExecutor
+
 Constructing a PriorityTaskExecutor with the default configuration whereby default and cancellable tasks have the same priority:
 
 ```
@@ -38,6 +40,20 @@ Constructing a task executor where normal tasks can overtake both cancellable an
 
 ```
 PriorityTaskExecutor.aTaskExecutor().allowNormalTasksToOvertakeAllTasks().build();
+```
+
+#### Constructing a Task
+
+The `Tasks` class is reponsible for constructing a Task of the correct type. Each type of task must at a mininum have the `Command` it is to execute. This is a simple functional interface that has an `execute()` method on it.
+
+Constructing a default task that will execute a "PlaceOrder" command:
+
+```java
+public void onMessage(PlaceOrderRequest request) {
+  Command command = new PlaceOrderCommand(request);
+  Task task = Tasks.aTask().with(command).build();
+  this.taskExecutor.submit(task);
+}
 ```
 
 
