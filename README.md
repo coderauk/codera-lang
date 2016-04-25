@@ -6,6 +6,27 @@ Helper classes and utilities around core Java concepts such as io, collections, 
 
 ### PriorityTaskExecutor
 
+The PriorityTaskExecutor has the concept of different types of task, these are the default, cancellable and cancelling. 
+
+The executor is single threaded and will process tasks in the order in which they are submitted with higher priority tasks allowed to jump the queue. 
+
+In the default configuration default and cancellable tasks are the same priority with only cancelling tasks a higher priority.
+
+This is useful in a situation such as an ordering system whereby a "CancelOrder" message should be able to overtake the corresponding "PlaceOrder" message. 
+
+Depending on the configuration of the executor default tasks can either be the same priority as cancellable tasks, overtake cancellable tasks or overtake all types of task.
+
+Allowing default tasks to overtake is useful when they are required to report the status, e.g. what are the current orders? 
+
+> Tasks can overtake those that have not started processing. Once a lower priority task has begun execution it must complete before the executor asks for the next task.
+### Usage
+
+Constructing a PriorityTaskExecutor with the default configuration whereby default and cancellable tasks have the same priority:
+
+```
+PriorityTaskExecutor taskExecutor = PriorityTaskExecutor.aTaskExecutor().build();
+```
+
 ## Misc
 
 ### Announcer
