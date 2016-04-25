@@ -6,7 +6,7 @@ package uk.co.codera.lang.concurrent;
  * command will either be executed or successful.
  * </p>
  * <p>
- * The mechanism to execute a command is to create a {@link task} and schedule
+ * The mechanism to execute a command is to create a {@link Task} and schedule
  * it with the {@link PriorityTaskExecutor} for execution.
  * </p>
  * <p>
