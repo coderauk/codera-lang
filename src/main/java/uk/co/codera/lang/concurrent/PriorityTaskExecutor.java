@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Executor;
 
+import uk.co.codera.lang.concurrent.PriorityTaskExecutor.Builder;
 import uk.co.codera.lang.concurrent.Tasks.CancellableTask;
 import uk.co.codera.lang.concurrent.Tasks.CancellingTask;
 
@@ -29,10 +30,15 @@ public class PriorityTaskExecutor {
     private final ConcurrentMap<Object, Comparable<?>> cancelledTasks;
     private final RunPolicyFactory runPolicies;
 
-    public PriorityTaskExecutor() {
-        this.executor = SequencedPriorityExecutor.singleThreadedExecutor(new PriorityTaskComparator());
+    private PriorityTaskExecutor(Builder builder) {
+        this.executor = SequencedPriorityExecutor.singleThreadedExecutor(new PriorityTaskComparator(
+                builder.normalTaskBehaviour));
         this.cancelledTasks = new ConcurrentHashMap<>();
         this.runPolicies = new RunPolicyFactory(this.cancelledTasks);
+    }
+
+    public static Builder aTaskExecutor() {
+        return new Builder();
     }
 
     public void submit(Task task) {
@@ -44,7 +50,44 @@ public class PriorityTaskExecutor {
         return (RunPolicy<Task>) this.runPolicies.policyFor(task);
     }
 
+    public static class Builder {
+
+        private NormalTaskBehaviour normalTaskBehaviour = NormalTaskBehaviour.DOES_NOT_OVERTAKE;
+
+        private Builder() {
+            super();
+        }
+
+        public Builder allowNormalTasksToOvertakeCancellableTasks() {
+            return normalTaskBehaviour(NormalTaskBehaviour.OVERTAKE_CANCELLABLE);
+        }
+
+        public Builder allowNormalTasksToOvertakeAllTasks() {
+            return normalTaskBehaviour(NormalTaskBehaviour.OVERTAKE_ALL);
+        }
+
+        private Builder normalTaskBehaviour(NormalTaskBehaviour behaviour) {
+            this.normalTaskBehaviour = behaviour;
+            return this;
+        }
+
+        public PriorityTaskExecutor build() {
+            return new PriorityTaskExecutor(this);
+        }
+    }
+
+    private enum NormalTaskBehaviour {
+        DOES_NOT_OVERTAKE, OVERTAKE_CANCELLABLE, OVERTAKE_ALL;
+    }
+
     private static class PriorityTaskComparator implements Comparator<Runnable> {
+
+        private final NormalTaskBehaviour normalTaskBehaviour;
+
+        public PriorityTaskComparator(NormalTaskBehaviour normalTaskBehaviour) {
+            this.normalTaskBehaviour = normalTaskBehaviour;
+        }
+
         @Override
         public int compare(Runnable o1, Runnable o2) {
             return priority(o2).compareTo(priority(o1));
@@ -58,9 +101,9 @@ public class PriorityTaskExecutor {
             } else if (clazz == CancellingTask.class) {
                 return 1;
             }
-            return 0;
+            return this.normalTaskBehaviour.ordinal();
         }
-    };
+    }
 
     private static class TaskRunner implements Runnable {
 
