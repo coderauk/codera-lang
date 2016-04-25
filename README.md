@@ -18,7 +18,7 @@ Depending on the configuration of the executor default tasks can either be the s
 
 Allowing default tasks to overtake is useful when they are required to report the status, e.g. what are the current orders? 
 
-> Tasks can overtake those that have not started processing. Once a lower priority task has begun execution it must complete before the executor asks for the next task.
+> Tasks can only overtake those that have not started processing. Once a lower priority task has begun execution it must complete before the executor asks for the next task.
 
 ### Usage
 
