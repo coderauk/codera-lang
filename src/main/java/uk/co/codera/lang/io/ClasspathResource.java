@@ -21,7 +21,7 @@ public class ClasspathResource {
         }
     }
 
-    private InputStream getAsStream() {
+    public InputStream getAsStream() {
         return ClasspathResource.class.getResourceAsStream(this.path);
     }
 }
