@@ -24,7 +24,7 @@ public class Tasks {
         return CancellingTask.aTask();
     }
 
-    public abstract static class AbstractTask implements Task {
+    public abstract static class AbstractTask implements Task, CommandExecutor {
 
         private final Command command;
 
@@ -35,6 +35,11 @@ public class Tasks {
         @Override
         public void execute() {
             this.command.execute();
+        }
+
+        @Override
+        public Command getCommand() {
+            return this.command;
         }
 
         public abstract static class Builder<T> {
