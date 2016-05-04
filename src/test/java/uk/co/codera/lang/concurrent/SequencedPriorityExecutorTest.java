@@ -8,13 +8,14 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 import java.util.Comparator;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
+
+import uk.co.codera.lang.concurrent.TestTasks.AwaitableJob;
+import uk.co.codera.lang.concurrent.TestTasks.BlockingJob;
 
 public class SequencedPriorityExecutorTest {
 
@@ -135,46 +136,5 @@ public class SequencedPriorityExecutorTest {
     }
 
     private interface LowPriorityJob extends Runnable {
-    }
-
-    private static class AwaitableJob implements Runnable {
-        private final CountDownLatch latch;
-
-        private AwaitableJob() {
-            this.latch = new CountDownLatch(1);
-        }
-
-        @Override
-        public void run() {
-            this.latch.countDown();
-        }
-
-        public boolean waitForJobToCompleteWithinTimeout(long timeout) {
-            try {
-                return this.latch.await(timeout, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                return false;
-            }
-        }
-    }
-
-    private static class BlockingJob implements Runnable {
-        private final CountDownLatch latch;
-
-        private BlockingJob() {
-            this.latch = new CountDownLatch(1);
-        }
-
-        @Override
-        public void run() {
-            try {
-                this.latch.await();
-            } catch (InterruptedException e) {
-            }
-        }
-
-        public void release() {
-            this.latch.countDown();
-        }
     }
 }

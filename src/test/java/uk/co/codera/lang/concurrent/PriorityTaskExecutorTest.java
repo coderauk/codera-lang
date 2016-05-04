@@ -11,14 +11,13 @@ import static uk.co.codera.lang.concurrent.Tasks.aCancellableTask;
 import static uk.co.codera.lang.concurrent.Tasks.aCancellingTask;
 import static uk.co.codera.lang.concurrent.Tasks.aTask;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
 import uk.co.codera.lang.concurrent.Tasks.AbstractTask;
+import uk.co.codera.lang.concurrent.TestCommands.AwaitableCommand;
+import uk.co.codera.lang.concurrent.TestCommands.BlockingCommand;
 
 public class PriorityTaskExecutorTest {
 
@@ -220,47 +219,5 @@ public class PriorityTaskExecutorTest {
 
     private void submit(AbstractTask.Builder<?> task) {
         this.taskExecutor.submit(task.build());
-    }
-
-    private static class AwaitableCommand implements Command {
-        private final CountDownLatch latch;
-
-        private AwaitableCommand() {
-            this.latch = new CountDownLatch(1);
-        }
-
-        @Override
-        public void execute() {
-            this.latch.countDown();
-        }
-
-        public boolean waitForCommandToCompleteWithinTimeout(long timeout) {
-            try {
-                return this.latch.await(timeout, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                return false;
-            }
-        }
-    }
-
-    private class BlockingCommand implements Command {
-
-        private final CountDownLatch latch;
-
-        public BlockingCommand() {
-            this.latch = new CountDownLatch(1);
-        }
-
-        @Override
-        public void execute() {
-            try {
-                this.latch.await();
-            } catch (InterruptedException e) {
-            }
-        }
-
-        public void release() {
-            this.latch.countDown();
-        }
     }
 }
