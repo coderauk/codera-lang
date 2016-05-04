@@ -6,12 +6,11 @@ package uk.co.codera.lang.concurrent;
  * {@link PriorityTaskExecutor}.
  * </p>
  * <p>
- * The TaskExecturo is responsible for determining if the task should be run
+ * The TaskExecutor is responsible for determining if the task should be run
  * based on it's type and what other tasks it has executed.
  * </p>
  * 
  * @author andystewart
- *
  */
 @FunctionalInterface
 public interface Task {

@@ -28,12 +28,14 @@ public class PriorityTaskExecutor {
     private final Executor executor;
     private final ConcurrentMap<Object, Comparable<?>> cancelledTasks;
     private final RunPolicyFactory runPolicies;
+    private final TaskCallback callback;
 
     private PriorityTaskExecutor(Builder builder) {
         this.executor = SequencedPriorityExecutor.singleThreadedExecutor(new PriorityTaskComparator(
                 builder.normalTaskBehaviour));
         this.cancelledTasks = new ConcurrentHashMap<>();
         this.runPolicies = new RunPolicyFactory(this.cancelledTasks);
+        this.callback = builder.callback;
     }
 
     public static Builder aTaskExecutor() {
@@ -41,7 +43,8 @@ public class PriorityTaskExecutor {
     }
 
     public void submit(Task task) {
-        this.executor.execute(new TaskRunner(runPolicyFor(task), task));
+        TaskRunner taskRunner = new TaskRunner(runPolicyFor(task), task, this.callback);
+        this.executor.execute(taskRunner);
     }
 
     @SuppressWarnings("unchecked")
@@ -52,6 +55,7 @@ public class PriorityTaskExecutor {
     public static class Builder {
 
         private NormalTaskBehaviour normalTaskBehaviour = NormalTaskBehaviour.DOES_NOT_OVERTAKE;
+        private TaskCallback callback = new TaskCallbackAdapter();
 
         private Builder() {
             super();
@@ -63,6 +67,11 @@ public class PriorityTaskExecutor {
 
         public Builder allowNormalTasksToOvertakeAllTasks() {
             return normalTaskBehaviour(NormalTaskBehaviour.OVERTAKE_ALL);
+        }
+
+        public Builder with(TaskCallback callback) {
+            this.callback = callback;
+            return this;
         }
 
         private Builder normalTaskBehaviour(NormalTaskBehaviour behaviour) {
@@ -108,16 +117,25 @@ public class PriorityTaskExecutor {
 
         private final RunPolicy<Task> runPolicy;
         private final Task task;
+        private final TaskCallback callback;
 
-        private TaskRunner(RunPolicy<Task> runPolicy, Task task) {
+        private TaskRunner(RunPolicy<Task> runPolicy, Task task, TaskCallback callback) {
             this.runPolicy = runPolicy;
             this.task = task;
+            this.callback = callback;
         }
 
         @Override
         public void run() {
             if (this.runPolicy.shouldRun(this.task)) {
-                this.task.execute();
+                try {
+                    this.task.execute();
+                    this.callback.onTaskExecuted(this.task);
+                } catch (RuntimeException e) {
+                    this.callback.onTaskFailure(this.task, e);
+                }
+            } else {
+                this.callback.onTaskCancelled(this.task);
             }
         }
     }

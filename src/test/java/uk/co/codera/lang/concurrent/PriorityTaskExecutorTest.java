@@ -2,6 +2,9 @@ package uk.co.codera.lang.concurrent;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -196,6 +199,50 @@ public class PriorityTaskExecutorTest {
         inOrder.verify(cancellingCommand).execute();
     }
 
+    @Test
+    public void shouldInvokeCallbackWhenTaskExecutedSuccessfully() {
+        TaskCallback callback = taskExecutorWithCallback();
+        Task task = aTask().with(mock(Command.class)).build();
+        submit(task);
+        waitForAllTasksToExecuteWithinDefaultTimeout();
+        verify(callback).onTaskExecuted(task);
+    }
+
+    @Test
+    public void shouldInvokeCallbackWhenTaskCancelled() {
+        TaskCallback callback = taskExecutorWithCallback();
+        BlockingCommand blockingCommand = submitBlockingCommand();
+
+        Task taskToBeCancelled = aCancellableTask().with(mock(Command.class)).correlationId("jeff")
+                .sequence(Long.valueOf(1)).build();
+        submit(taskToBeCancelled);
+        submit(aCancellingTask().with(mock(Command.class)).correlationId("jeff").sequence(Long.valueOf(2)));
+
+        blockingCommand.release();
+        waitForAllTasksToExecuteWithinDefaultTimeout();
+
+        verify(callback).onTaskCancelled(taskToBeCancelled);
+    }
+
+    @Test
+    public void shouldInvokeCallbackWhenTaskThrowsException() {
+        TaskCallback callback = taskExecutorWithCallback();
+        Command command = mock(Command.class);
+        doThrow(new IllegalStateException("boom")).when(command).execute();
+        Task task = Tasks.aTask().with(command).build();
+
+        submit(task);
+        waitForAllTasksToExecuteWithinDefaultTimeout();
+
+        verify(callback).onTaskFailure(eq(task), isA(IllegalStateException.class));
+    }
+
+    private TaskCallback taskExecutorWithCallback() {
+        TaskCallback callback = mock(TaskCallback.class);
+        this.taskExecutor = PriorityTaskExecutor.aTaskExecutor().with(callback).build();
+        return callback;
+    }
+
     private void waitForAllTasksToExecuteWithinDefaultTimeout() {
         waitForAllTasksToExecuteWithinTimeout(DEFAULT_TIMEOUT);
     }
@@ -218,6 +265,10 @@ public class PriorityTaskExecutorTest {
     }
 
     private void submit(AbstractTask.Builder<?> task) {
-        this.taskExecutor.submit(task.build());
+        submit(task.build());
+    }
+
+    private void submit(Task task) {
+        this.taskExecutor.submit(task);
     }
 }
