@@ -200,6 +200,17 @@ public class PriorityTaskExecutorTest {
     }
 
     @Test
+    public void shouldNotBeHaltedByTaskThatThrowsAnException() {
+        Command command = mock(Command.class);
+
+        submit(aTaskWhichThrowsAnException());
+        submit(aTask().with(command));
+        waitForAllTasksToExecuteWithinDefaultTimeout();
+
+        verify(command).execute();
+    }
+
+    @Test
     public void shouldInvokeCallbackWhenTaskExecutedSuccessfully() {
         TaskCallback callback = taskExecutorWithCallback();
         Task task = aTask().with(mock(Command.class)).build();
@@ -227,14 +238,19 @@ public class PriorityTaskExecutorTest {
     @Test
     public void shouldInvokeCallbackWhenTaskThrowsException() {
         TaskCallback callback = taskExecutorWithCallback();
-        Command command = mock(Command.class);
-        doThrow(new IllegalStateException("boom")).when(command).execute();
-        Task task = Tasks.aTask().with(command).build();
+        Task task = aTaskWhichThrowsAnException();
 
         submit(task);
         waitForAllTasksToExecuteWithinDefaultTimeout();
 
         verify(callback).onTaskFailure(eq(task), isA(IllegalStateException.class));
+    }
+
+    private Task aTaskWhichThrowsAnException() {
+        Command command = mock(Command.class);
+        doThrow(new IllegalStateException("boom")).when(command).execute();
+        Task task = Tasks.aTask().with(command).build();
+        return task;
     }
 
     private TaskCallback taskExecutorWithCallback() {
