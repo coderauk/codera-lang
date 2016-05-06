@@ -84,6 +84,21 @@ When a cancelling task is executed the sequence is recorded against the correlat
 
 > Note that you should make sure the sequence numbers are allocated correctly to make sure a cancellable task does not clear the status in error and tasks that should have been cancelled get executed by mistak.
 
+#### Task Callbacks
+
+From version 0.0.8 onwards a callback can be registered that will be notified when things happen with the task. 
+
+The callback should implement the `uk.co.codera.lang.concurrent.TaskCallback` interface and can be registered in the following manner when building the executor:
+
+```java 
+PriorityTaskExecutor taskExecutor = 
+    PriorityTaskExecutor.aTaskExecutor().with(new LoggingTaskCallback()).build();
+```
+
+An adapter has been provided which has do nothing implementations, it is recommended that rather than implement the interface directly clients should extend from `uk.co.codera.lang.concurrent.TaskCallbackAdapter`. 
+
+The logic behind this is that currently we notify when a task is executed, cancelled or failed with an exception. However we might extend the interface in the future for other events. If the client implements the interface directly they will break when they upgrade, if they extend the adapter then their code will carry on working as before.
+
 ## Misc
 
 ### Announcer
