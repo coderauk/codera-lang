@@ -7,6 +7,9 @@ public class Probability {
     private final BigDecimal probability;
 
     private Probability(BigDecimal probability) {
+    	if (probability == null) {
+    		throw new IllegalArgumentException("Probability can't be null");
+    	}
         this.probability = probability;
     }
 
@@ -25,8 +28,16 @@ public class Probability {
     public Probability add(Probability other) {
         return of(doAdd(other));
     }
+    
+    public Probability multiply(Probability other) {
+    	return of(doMultiply(other));
+    }
+    
+    public Probability complement() {
+    	return of(doComplement());
+    }
 
-    public int scale() {
+	public int scale() {
         return this.probability.scale();
     }
 
@@ -54,5 +65,13 @@ public class Probability {
 
     private BigDecimal doAdd(Probability other) {
         return this.probability.add(other.probability);
+    }
+    
+    private BigDecimal doMultiply(Probability other) {
+    	return this.probability.multiply(other.probability);
+    }
+    
+    private BigDecimal doComplement() {
+    	return BigDecimal.ONE.subtract(this.probability);
     }
 }
