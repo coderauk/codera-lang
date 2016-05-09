@@ -22,6 +22,10 @@ public class Probability {
         return new Probability(probability);
     }
 
+    public Probability add(Probability other) {
+        return of(doAdd(other));
+    }
+
     public int scale() {
         return this.probability.scale();
     }
@@ -29,6 +33,11 @@ public class Probability {
     @Override
     public String toString() {
         return this.probability.toPlainString();
+    }
+
+    @Override
+    public int hashCode() {
+        return 37 * this.probability.stripTrailingZeros().hashCode();
     }
 
     @Override
@@ -41,5 +50,9 @@ public class Probability {
         }
         Probability other = (Probability) obj;
         return this.probability.compareTo(other.probability) == 0;
+    }
+
+    private BigDecimal doAdd(Probability other) {
+        return this.probability.add(other.probability);
     }
 }

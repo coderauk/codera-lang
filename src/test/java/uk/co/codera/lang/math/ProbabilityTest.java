@@ -58,7 +58,27 @@ public class ProbabilityTest {
     }
 
     @Test
+    public void shouldHaveSameHashCodeIfProbabilitiesAreEqual() {
+        assertThat(Probability.of("0.5").hashCode(), is(equalTo(Probability.of("0.5").hashCode())));
+    }
+
+    @Test
+    public void shouldHaveSameHashCodeIfProbabilitiesAreEqualWithDifferentScale() {
+        assertThat(Probability.of("0.5000").hashCode(), is(equalTo(Probability.of("0.5").hashCode())));
+    }
+
+    @Test
+    public void shouldHaveDifferentHashCodeIfProbabilitiesAreNotEqual() {
+        assertThat(Probability.of("0.5").hashCode(), is(not(equalTo(Probability.of("0.75").hashCode()))));
+    }
+
+    @Test
     public void shouldBeEqualIfProbabilityTheSameWithDifferentScale() {
         assertThat(Probability.of("0.5"), is(equalTo(Probability.of("0.5000"))));
+    }
+
+    @Test
+    public void shouldBeAbleToAddTwoProbabilitiesTogether() {
+        assertThat(Probability.of("0.5").add(Probability.of("0.25")), is(Probability.of("0.75")));
     }
 }
