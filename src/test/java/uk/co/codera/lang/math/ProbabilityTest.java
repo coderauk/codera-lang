@@ -1,6 +1,8 @@
 package uk.co.codera.lang.math;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -10,23 +12,53 @@ import org.junit.Test;
 
 public class ProbabilityTest {
 
-	@Test
-	public void shouldBeAbleToConstructFromDouble() {
-		assertThat(Probability.of(0.5d), is(notNullValue()));
-	}
-	
-	@Test
-	public void shouldBeAbleToConstructFromString() {
-		assertThat(Probability.of("0.5"), is(notNullValue()));
-	}
-	
-	@Test
-	public void shouldBeAbleToConstructFromBigDecimal() {
-		assertThat(Probability.of(new BigDecimal("0.5")), is(notNullValue()));
-	}
-	
-	@Test
-	public void shouldPrintValueOfProbabilityAsToString() {
-		assertThat(Probability.of(0.75d).toString(), is("0.75"));
-	}
+    @Test
+    public void shouldBeAbleToConstructFromDouble() {
+        assertThat(Probability.of(0.5d), is(notNullValue()));
+    }
+
+    @Test
+    public void shouldBeAbleToConstructFromString() {
+        assertThat(Probability.of("0.5"), is(notNullValue()));
+    }
+
+    @Test
+    public void shouldBeAbleToConstructFromBigDecimal() {
+        assertThat(Probability.of(new BigDecimal("0.5")), is(notNullValue()));
+    }
+
+    @Test
+    public void shouldPrintValueOfProbabilityAsToString() {
+        assertThat(Probability.of(0.75d).toString(), is("0.75"));
+    }
+
+    @Test
+    public void shouldPreserveScale() {
+        assertThat(Probability.of("0.5000").scale(), is(4));
+    }
+
+    @Test
+    public void shouldNotBeEqualIfOtherObjectIsNull() {
+        assertThat(Probability.of("0.5"), is(not(equalTo(null))));
+    }
+
+    @Test
+    public void shouldNotBeEqualIfOtherObjectIsNotAProbability() {
+        assertThat(Probability.of("0.5"), is(not(equalTo(new Object()))));
+    }
+
+    @Test
+    public void shouldNotBeEqualIfProbabilityDifferent() {
+        assertThat(Probability.of("0.5"), is(not(equalTo(Probability.of(0.6d)))));
+    }
+
+    @Test
+    public void shouldBeEqualIfProbabilityTheSame() {
+        assertThat(Probability.of("0.5"), is(equalTo(Probability.of(0.5d))));
+    }
+
+    @Test
+    public void shouldBeEqualIfProbabilityTheSameWithDifferentScale() {
+        assertThat(Probability.of("0.5"), is(equalTo(Probability.of("0.5000"))));
+    }
 }
