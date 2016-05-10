@@ -1,5 +1,7 @@
 package uk.co.codera.lang.math;
 
+import java.math.BigInteger;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -9,8 +11,9 @@ public class Fraction {
     private final int denominator;
 
     private Fraction(int nominator, int denominator) {
-        this.nominator = nominator;
-        this.denominator = denominator;
+        int gcd = gcd(nominator, denominator);
+        this.nominator = nominator / gcd;
+        this.denominator = denominator / gcd;
     }
 
     public static Fraction from(String fraction) {
@@ -43,5 +46,9 @@ public class Fraction {
     @Override
     public String toString() {
         return this.nominator + "/" + this.denominator;
+    }
+
+    private int gcd(int nominator, int denominator) {
+        return BigInteger.valueOf(nominator).gcd(BigInteger.valueOf(denominator)).intValue();
     }
 }

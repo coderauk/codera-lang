@@ -26,6 +26,11 @@ public class FractionTest {
     }
 
     @Test
+    public void shouldReduceToLowestTerm() {
+        assertThat(Fraction.from("4/6").toString(), is("2/3"));
+    }
+
+    @Test
     public void shouldNotBeEqualIfOtherObjectIsNull() {
         assertThat(Fraction.from("1/2"), is(not(equalTo(null))));
     }
