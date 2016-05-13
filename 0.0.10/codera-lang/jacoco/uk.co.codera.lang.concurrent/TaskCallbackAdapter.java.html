@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TaskCallbackAdapter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">codera-lang</a> &gt; <a href="index.source.html" class="el_package">uk.co.codera.lang.concurrent</a> &gt; <span class="el_source">TaskCallbackAdapter.java</span></div><h1>TaskCallbackAdapter.java</h1><pre class="source lang-java linenums">package uk.co.codera.lang.concurrent;
+
+/**
+ * &lt;p&gt;
+ * Implementation of the {@link TaskCallback} where all the methods have a do
+ * nothing implementation.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Rather than implement the interface directly clients should extend this class
+ * and override behaviour as necessary. This will ensure that if methods are
+ * added to the interface in the future client code will still compile as a do
+ * nothing implementation will be added to this class.
+ * &lt;/p&gt;
+ * 
+ * @author andystewart
+ */
+<span class="fc" id="L17">public class TaskCallbackAdapter implements TaskCallback {</span>
+
+    @Override
+    public &lt;T extends Task&gt; void onTaskExecuted(T task) {
+        // do nothing
+<span class="fc" id="L22">    }</span>
+
+    @Override
+    public &lt;T extends Task&gt; void onTaskFailure(T task, RuntimeException e) {
+        // do nothing
+<span class="fc" id="L27">    }</span>
+
+    @Override
+    public &lt;T extends Task&gt; void onTaskCancelled(T task) {
+        // do nothing
+<span class="fc" id="L32">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

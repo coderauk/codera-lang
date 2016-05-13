@@ -1,0 +1,36 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+codera-lang,uk.co.codera.lang.math,Fraction,0,166,0,4,0,23,0,14,0,12
+codera-lang,uk.co.codera.lang.math,Probability,0,96,0,8,0,23,0,18,0,14
+codera-lang,uk.co.codera.lang,Announcer,0,131,0,6,0,36,0,17,0,14
+codera-lang,uk.co.codera.lang,Announcer.DoNothingExceptionHandler,0,4,0,0,0,2,0,2,0,2
+codera-lang,uk.co.codera.lang.measure,UnitOfLength,9,29,0,0,0,3,2,2,2,2
+codera-lang,uk.co.codera.lang.measure,UnitOfLength.new UnitOfLength() {...},0,16,0,0,0,3,0,3,0,3
+codera-lang,uk.co.codera.lang.measure,UnitOfLength.new UnitOfLength() {...},0,15,0,0,0,3,0,3,0,3
+codera-lang,uk.co.codera.lang.concurrent,Tasks.CancellableTask.Builder,0,9,0,0,0,2,0,2,0,2
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.NormalTaskBehaviour,9,39,0,0,0,2,2,2,2,2
+codera-lang,uk.co.codera.lang.concurrent,Tasks.AbstractCorrelatedTask.Builder,0,13,0,0,0,5,0,3,0,3
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.CheckNotCancelled,0,48,0,6,0,12,0,6,0,3
+codera-lang,uk.co.codera.lang.concurrent,TaskCallbackAdapter,0,6,0,0,0,4,0,4,0,4
+codera-lang,uk.co.codera.lang.concurrent,Tasks.CancellingTask,0,9,0,0,0,3,0,2,0,2
+codera-lang,uk.co.codera.lang.concurrent,Tasks.CancellingTask.Builder,0,9,0,0,0,2,0,2,0,2
+codera-lang,uk.co.codera.lang.concurrent,Tasks.AbstractTask,0,14,0,0,0,6,0,3,0,3
+codera-lang,uk.co.codera.lang.concurrent,SequencedPriorityExecutor.SequencedPriorityComparator,0,30,0,2,0,9,0,3,0,2
+codera-lang,uk.co.codera.lang.concurrent,SequencedPriorityExecutor.SequencedRunnable,0,20,0,0,0,8,0,4,0,4
+codera-lang,uk.co.codera.lang.concurrent,Tasks.AbstractTask.Builder,0,8,0,0,0,3,0,2,0,2
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor,0,55,0,0,0,12,0,4,0,4
+codera-lang,uk.co.codera.lang.concurrent,Tasks.SimpleTask,0,9,0,0,0,3,0,2,0,2
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.Builder,0,35,0,0,0,11,0,6,0,6
+codera-lang,uk.co.codera.lang.concurrent,SequencedPriorityExecutor,0,56,0,0,0,11,0,5,0,5
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.RecordsCancellation,0,19,0,0,0,5,0,2,0,2
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.RunPolicyFactory,0,41,0,4,0,9,0,4,0,2
+codera-lang,uk.co.codera.lang.concurrent,Tasks.CancellableTask,0,9,0,0,0,3,0,2,0,2
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.TaskRunner,0,41,0,2,0,13,0,3,0,2
+codera-lang,uk.co.codera.lang.concurrent,Tasks,3,6,0,0,2,3,1,3,1,3
+codera-lang,uk.co.codera.lang.concurrent,Tasks.AbstractCorrelatedTask,0,19,0,0,0,6,0,3,0,3
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.PriorityTaskComparator,0,36,0,4,0,10,0,5,0,3
+codera-lang,uk.co.codera.lang.concurrent,PriorityTaskExecutor.AlwaysRun,0,8,0,0,0,2,0,2,0,2
+codera-lang,uk.co.codera.lang.concurrent,Tasks.SimpleTask.Builder,0,9,0,0,0,2,0,2,0,2
+codera-lang,uk.co.codera.lang.datetime,TimeMeasure,0,38,0,0,0,10,0,7,0,7
+codera-lang,uk.co.codera.lang.xml,JaxbXmlAdapter,21,61,4,4,2,11,4,3,0,3
+codera-lang,uk.co.codera.lang.collection,MultiMap,0,49,0,4,0,11,0,6,0,4
+codera-lang,uk.co.codera.lang.io,ClasspathResource,0,21,0,0,0,7,0,3,0,3
