@@ -21,8 +21,30 @@ public class Fraction {
         return from(Integer.valueOf(split[0]), Integer.parseInt(split[1]));
     }
 
-    public static Fraction from(int numerator, int denominator) {
-        return new Fraction(numerator, denominator);
+    public static Fraction from(int nominator, int denominator) {
+        return new Fraction(nominator, denominator);
+    }
+
+    public Fraction reciprocal() {
+        return from(Integer.signum(this.nominator) * this.denominator, Integer.signum(this.nominator) * this.nominator);
+    }
+
+    public Fraction multiply(Fraction other) {
+        return from(this.nominator * other.nominator, this.denominator * other.denominator);
+    }
+
+    public Fraction add(Fraction other) {
+        return from((this.nominator * other.denominator) + (other.nominator * this.denominator), this.denominator
+                * other.denominator);
+    }
+
+    public Fraction subtract(Fraction other) {
+        return from((this.nominator * other.denominator) - (other.nominator * this.denominator), this.denominator
+                * other.denominator);
+    }
+
+    public Fraction divide(Fraction other) {
+        return this.multiply(other.reciprocal());
     }
 
     @Override
