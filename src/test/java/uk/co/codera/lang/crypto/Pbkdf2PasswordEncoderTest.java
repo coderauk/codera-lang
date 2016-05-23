@@ -38,7 +38,19 @@ public class Pbkdf2PasswordEncoderTest {
 
     @Test
     public void shouldEncodeNumberIterationsAsFirstPartOfResult() {
-    	PasswordEncoder encoderWithIterationsSet = new Pbkdf2PasswordEncoder(50, 128);
+        PasswordEncoder encoderWithIterationsSet = new Pbkdf2PasswordEncoder(50, 128);
         assertThat(encoderWithIterationsSet.encode("any"), startsWith("50:"));
+    }
+
+    @Test
+    public void shouldNotMatchPasswordThatIsNotCorrect() {
+        String encodedPassword = this.encoder.encode("password1");
+        assertThat(this.encoder.matches("password2", encodedPassword), is(false));
+    }
+
+    @Test
+    public void shouldMatchPasswordThatIsCorrect() {
+        String encodedPassword = this.encoder.encode("password1");
+        assertThat(this.encoder.matches("password1", encodedPassword), is(true));
     }
 }

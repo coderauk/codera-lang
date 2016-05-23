@@ -3,6 +3,7 @@ package uk.co.codera.lang.crypto;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -31,13 +32,23 @@ public class Pbkdf2PasswordEncoder implements PasswordEncoder {
     @Override
     public String encode(String password) {
         byte[] salt = randomSalt();
-        byte[] hash = encode(password, salt);
+        byte[] hash = encode(password, salt, this.iterations, this.keyLength);
         return iterations + ":" + toHex(salt) + ":" + toHex(hash);
     }
 
-    private byte[] encode(String password, byte[] salt) {
+    @Override
+    public boolean matches(CharSequence rawPassword, String encodedPassword) {
+        String[] parts = encodedPassword.split(":");
+        int iterations = Integer.parseInt(parts[0]);
+        byte[] salt = fromHex(parts[1]);
+        byte[] hash = fromHex(parts[2]);
+        byte[] testHash = encode(rawPassword.toString(), salt, iterations, hash.length * 8);
+        return Arrays.equals(hash, testHash);
+    }
+
+    private byte[] encode(String password, byte[] salt, int iterations, int keyLength) {
         try {
-            PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, this.iterations, this.keyLength);
+            PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterations, keyLength);
             SecretKeyFactory skf = SecretKeyFactory.getInstance(ALGORITHM_PBKDF2);
             return skf.generateSecret(spec).getEncoded();
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -60,14 +71,11 @@ public class Pbkdf2PasswordEncoder implements PasswordEncoder {
         }
     }
 
+    private byte[] fromHex(String hex) {
+        return DatatypeConverter.parseHexBinary(hex);
+    }
+
     private String toHex(byte[] array) {
         return DatatypeConverter.printHexBinary(array);
-        // BigInteger bi = new BigInteger(1, array);
-        // String hex = bi.toString(16);
-        // int paddingLength = (array.length * 2) - hex.length();
-        // if (paddingLength > 0) {
-        // return String.format("%0" + paddingLength + "d", 0) + hex;
-        // }
-        // return hex;
     }
 }
