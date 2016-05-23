@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Probability.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">codera-lang</a> &gt; <a href="index.source.html" class="el_package">uk.co.codera.lang.math</a> &gt; <span class="el_source">Probability.java</span></div><h1>Probability.java</h1><pre class="source lang-java linenums">package uk.co.codera.lang.math;
+
+import java.math.BigDecimal;
+
+public class Probability {
+
+    private final BigDecimal probability;
+
+<span class="fc" id="L9">    private Probability(BigDecimal probability) {</span>
+<span class="fc bfc" id="L10" title="All 2 branches covered.">        if (probability == null) {</span>
+<span class="fc" id="L11">            throw new IllegalArgumentException(&quot;Probability can't be null&quot;);</span>
+        }
+<span class="fc" id="L13">        this.probability = probability;</span>
+<span class="fc" id="L14">    }</span>
+
+    public static Probability of(double probability) {
+<span class="fc" id="L17">        return of(BigDecimal.valueOf(probability));</span>
+    }
+
+    public static Probability of(String probability) {
+<span class="fc" id="L21">        return of(new BigDecimal(probability));</span>
+    }
+
+    public static Probability of(BigDecimal probability) {
+<span class="fc" id="L25">        return new Probability(probability);</span>
+    }
+
+    public Probability add(Probability other) {
+<span class="fc" id="L29">        return of(doAdd(other));</span>
+    }
+
+    public Probability multiply(Probability other) {
+<span class="fc" id="L33">        return of(doMultiply(other));</span>
+    }
+
+    public Probability complement() {
+<span class="fc" id="L37">        return of(doComplement());</span>
+    }
+
+    public int scale() {
+<span class="fc" id="L41">        return this.probability.scale();</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L46">        return this.probability.toPlainString();</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L51">        return 37 * this.probability.stripTrailingZeros().hashCode();</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (obj == null) {</span>
+<span class="fc" id="L57">            return false;</span>
+        }
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (!(obj instanceof Probability)) {</span>
+<span class="fc" id="L60">            return false;</span>
+        }
+<span class="fc" id="L62">        Probability other = (Probability) obj;</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        return this.probability.compareTo(other.probability) == 0;</span>
+    }
+
+    private BigDecimal doAdd(Probability other) {
+<span class="fc" id="L67">        return this.probability.add(other.probability);</span>
+    }
+
+    private BigDecimal doMultiply(Probability other) {
+<span class="fc" id="L71">        return this.probability.multiply(other.probability);</span>
+    }
+
+    private BigDecimal doComplement() {
+<span class="fc" id="L75">        return BigDecimal.ONE.subtract(this.probability);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

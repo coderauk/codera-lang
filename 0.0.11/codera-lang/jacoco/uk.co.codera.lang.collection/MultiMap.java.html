@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MultiMap.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">codera-lang</a> &gt; <a href="index.source.html" class="el_package">uk.co.codera.lang.collection</a> &gt; <span class="el_source">MultiMap.java</span></div><h1>MultiMap.java</h1><pre class="source lang-java linenums">package uk.co.codera.lang.collection;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class MultiMap&lt;K, V&gt; {
+
+    private final Map&lt;K, List&lt;V&gt;&gt; values;
+
+<span class="fc" id="L14">    public MultiMap() {</span>
+<span class="fc" id="L15">        this.values = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L16">    }</span>
+
+    public void put(K key, V value) {
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (!this.values.containsKey(key)) {</span>
+<span class="fc" id="L20">            this.values.put(key, new ArrayList&lt;V&gt;());</span>
+        }
+<span class="fc" id="L22">        this.values.get(key).add(value);</span>
+<span class="fc" id="L23">    }</span>
+
+    public boolean remove(K key, V value) {
+<span class="fc" id="L26">        return get(key).remove(value);</span>
+    }
+
+    public Collection&lt;V&gt; get(K key) {
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (this.values.containsKey(key)) {</span>
+<span class="fc" id="L31">            return this.values.get(key);</span>
+        }
+<span class="fc" id="L33">        return Collections.emptyList();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

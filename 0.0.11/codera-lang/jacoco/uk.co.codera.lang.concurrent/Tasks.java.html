@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Tasks.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">codera-lang</a> &gt; <a href="index.source.html" class="el_package">uk.co.codera.lang.concurrent</a> &gt; <span class="el_source">Tasks.java</span></div><h1>Tasks.java</h1><pre class="source lang-java linenums">package uk.co.codera.lang.concurrent;
+
+/**
+ * Responsible for constructing the different kind of tasks used by the
+ * {@link PriorityTaskExecutor}.
+ * 
+ * @author andystewart
+ */
+public class Tasks {
+
+    private Tasks() {
+<span class="nc" id="L12">        super();</span>
+<span class="nc" id="L13">    }</span>
+
+    public static SimpleTask.Builder aTask() {
+<span class="fc" id="L16">        return SimpleTask.aTask();</span>
+    }
+
+    public static CancellableTask.Builder aCancellableTask() {
+<span class="fc" id="L20">        return CancellableTask.aTask();</span>
+    }
+
+    public static CancellingTask.Builder aCancellingTask() {
+<span class="fc" id="L24">        return CancellingTask.aTask();</span>
+    }
+
+    public abstract static class AbstractTask implements Task, CommandExecutor {
+
+        private final Command command;
+
+<span class="fc" id="L31">        private AbstractTask(Builder&lt;?&gt; builder) {</span>
+<span class="fc" id="L32">            this.command = builder.command;</span>
+<span class="fc" id="L33">        }</span>
+
+        @Override
+        public void execute() {
+<span class="fc" id="L37">            this.command.execute();</span>
+<span class="fc" id="L38">        }</span>
+
+        @Override
+        public Command getCommand() {
+<span class="fc" id="L42">            return this.command;</span>
+        }
+
+<span class="fc" id="L45">        public abstract static class Builder&lt;T&gt; {</span>
+
+            private Command command;
+
+            @SuppressWarnings(&quot;unchecked&quot;)
+            public T with(Command command) {
+<span class="fc" id="L51">                this.command = command;</span>
+<span class="fc" id="L52">                return (T) this;</span>
+            }
+
+            public abstract Task build();
+        }
+    }
+
+    public abstract static class AbstractCorrelatedTask extends AbstractTask {
+
+        private final Object correlationId;
+        private final Comparable&lt;?&gt; sequence;
+
+        private AbstractCorrelatedTask(Builder&lt;?&gt; builder) {
+<span class="fc" id="L65">            super(builder);</span>
+<span class="fc" id="L66">            this.correlationId = builder.correlationId;</span>
+<span class="fc" id="L67">            this.sequence = builder.sequence;</span>
+<span class="fc" id="L68">        }</span>
+
+        public Object getCorrelationId() {
+<span class="fc" id="L71">            return this.correlationId;</span>
+        }
+
+        @SuppressWarnings(&quot;squid:S1452&quot;)
+        public Comparable&lt;?&gt; getSequence() {
+<span class="fc" id="L76">            return this.sequence;</span>
+        }
+
+<span class="fc" id="L79">        public abstract static class Builder&lt;T&gt; extends AbstractTask.Builder&lt;T&gt; {</span>
+
+            private Object correlationId;
+            private Comparable&lt;?&gt; sequence;
+
+            @SuppressWarnings(&quot;unchecked&quot;)
+            public T correlationId(Object correlationId) {
+<span class="fc" id="L86">                this.correlationId = correlationId;</span>
+<span class="fc" id="L87">                return (T) this;</span>
+            }
+
+            @SuppressWarnings(&quot;unchecked&quot;)
+            public T sequence(Comparable&lt;?&gt; sequence) {
+<span class="fc" id="L92">                this.sequence = sequence;</span>
+<span class="fc" id="L93">                return (T) this;</span>
+            }
+        }
+    }
+
+    /**
+     * &lt;p&gt;
+     * This is the default kind of task. It has no affect on any tasks it may
+     * overtake (if it does indeed overtake them) nor can it be affected by any
+     * tasks that may overtake it. The executor will attempt to invoke the
+     * command whatever.
+     * &lt;/p&gt;
+     * 
+     * @author andystewart
+     */
+    public static class SimpleTask extends AbstractTask {
+
+        private SimpleTask(Builder builder) {
+<span class="fc" id="L111">            super(builder);</span>
+<span class="fc" id="L112">        }</span>
+
+        private static Builder aTask() {
+<span class="fc" id="L115">            return new Builder();</span>
+        }
+
+<span class="fc" id="L118">        public static class Builder extends AbstractTask.Builder&lt;Builder&gt; {</span>
+
+            @Override
+            public Task build() {
+<span class="fc" id="L122">                return new SimpleTask(this);</span>
+            }
+        }
+    }
+
+    /**
+     * &lt;p&gt;
+     * This kind of task can be cancelled by a {@link CancellingTask} that has
+     * the same correlationId and a sequence that is considered later than that
+     * on this task.
+     * &lt;/p&gt;
+     * 
+     * @author andystewart
+     */
+    public static class CancellableTask extends AbstractCorrelatedTask {
+
+        private CancellableTask(Builder builder) {
+<span class="fc" id="L139">            super(builder);</span>
+<span class="fc" id="L140">        }</span>
+
+        private static Builder aTask() {
+<span class="fc" id="L143">            return new Builder();</span>
+        }
+
+<span class="fc" id="L146">        public static class Builder extends AbstractCorrelatedTask.Builder&lt;Builder&gt; {</span>
+
+            @Override
+            public Task build() {
+<span class="fc" id="L150">                return new CancellableTask(this);</span>
+            }
+        }
+    }
+
+    /**
+     * &lt;p&gt;
+     * This kind of task will cancel any {@link CancellableTask} that has the
+     * same correlationId and an earlier sequence to this task.
+     * &lt;/p&gt;
+     * 
+     * @author andystewart
+     */
+    public static class CancellingTask extends AbstractCorrelatedTask {
+
+        private CancellingTask(Builder builder) {
+<span class="fc" id="L166">            super(builder);</span>
+<span class="fc" id="L167">        }</span>
+
+        private static Builder aTask() {
+<span class="fc" id="L170">            return new Builder();</span>
+        }
+
+<span class="fc" id="L173">        public static class Builder extends AbstractCorrelatedTask.Builder&lt;Builder&gt; {</span>
+
+            @Override
+            public Task build() {
+<span class="fc" id="L177">                return new CancellingTask(this);</span>
+            }
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
