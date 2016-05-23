@@ -16,7 +16,7 @@ public class Pbkdf2PasswordEncoderTest {
 
     @Before
     public void before() {
-        this.encoder = new Pbkdf2PasswordEncoder(50, 128);
+        this.encoder = new Pbkdf2PasswordEncoder();
     }
 
     @Test
@@ -38,6 +38,7 @@ public class Pbkdf2PasswordEncoderTest {
 
     @Test
     public void shouldEncodeNumberIterationsAsFirstPartOfResult() {
-        assertThat(this.encoder.encode("any"), startsWith("50:"));
+    	PasswordEncoder encoderWithIterationsSet = new Pbkdf2PasswordEncoder(50, 128);
+        assertThat(encoderWithIterationsSet.encode("any"), startsWith("50:"));
     }
 }
