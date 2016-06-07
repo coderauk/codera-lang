@@ -6,6 +6,10 @@ import java.util.stream.Collectors;
 
 public class Paginator {
 
+	private Paginator() {
+		super();
+	}
+	
     public static <T> List<T> paginate(List<T> original, int size, int offset) {
         return original.stream().skip(offset * size).limit(size).collect(Collectors.toCollection(ArrayList::new));
     }
