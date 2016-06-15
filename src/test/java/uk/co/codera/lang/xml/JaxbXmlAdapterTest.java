@@ -10,16 +10,16 @@ import org.junit.Test;
 
 public class JaxbXmlAdapterTest {
 
-    private JaxbXmlAdapter<JaxbAnnotatedObject> adapter;
+    private JaxbToXmlAdapter<JaxbAnnotatedObject> adapter;
 
     @Before
     public void before() {
-        this.adapter = new JaxbXmlAdapter<>(JaxbAnnotatedObject.class);
+        this.adapter = new JaxbToXmlAdapter<>(JaxbAnnotatedObject.class);
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldNotBeAbleToMarshalNonAnnotatedObject() {
-        new JaxbXmlAdapter<>(Object.class).adapt(new Object());
+        new JaxbToXmlAdapter<>(Object.class).adapt(new Object());
     }
 
     @Test

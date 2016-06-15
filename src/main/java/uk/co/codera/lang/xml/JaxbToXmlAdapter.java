@@ -9,11 +9,11 @@ import javax.xml.bind.Marshaller;
 
 import uk.co.codera.lang.Adapter;
 
-public class JaxbXmlAdapter<I> implements Adapter<I, String> {
+public class JaxbToXmlAdapter<I> implements Adapter<I, String> {
 
     private final Marshaller marshaller;
 
-    public JaxbXmlAdapter(Class<I> clazz) {
+    public JaxbToXmlAdapter(Class<I> clazz) {
         try {
             this.marshaller = JAXBContext.newInstance(clazz).createMarshaller();
         } catch (JAXBException e) {
